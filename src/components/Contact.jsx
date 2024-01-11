@@ -15,8 +15,41 @@ const Contact = () => {
   })
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => { }
-  const handleSubmit = (e) => { }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value })
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs.send(
+      'service_f2yh8a5',
+      'template_hv4uelh',
+      {
+        from_name: form.name,
+        to_name: 'Abdullateef Bello',
+        from_email: form.email,
+        to_email: 'belloabdullateef035@gmail.com',
+        message: form.message,
+      },
+      '6VaRJG6FmAhtdQ3qF'
+    )
+      .then(() => {
+        setLoading(false);
+        alert('Thank you, I will get back to you as soon as possible');
+
+        setForm({
+          name: '',
+          email: '',
+          message: '',
+        })
+      }, (error) => {
+        setLoading(false);
+        console.log(error);
+        alert('Something went wrong.')
+      })
+  }
   return (
     <div className='xl:mt-12 xl:flex-row flex-col-reverse flex gap-10 overflow-hidden'>
       <motion.div variants={slideIn('left', 'tween', 0.2, 1)} className='flex-[0.75] bg-black-100 p-8 rounded-2xl'>
@@ -29,7 +62,7 @@ const Contact = () => {
         >
           <label htmlFor="" className="flex flex-col">
             <span className='text-white font-medium mb-4'>Your Name</span>
-            <input type="text" name='text' value={form.name} onChange={handleChange} placeholder="What's your name?" className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded.lg outline-none border-none font-medium' />
+            <input type="text" name='name' value={form.name} onChange={handleChange} placeholder="What's your name?" className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded.lg outline-none border-none font-medium' />
           </label>
           <label htmlFor="" className="flex flex-col">
             <span className='text-white font-medium mb-4'>Your Email</span>
